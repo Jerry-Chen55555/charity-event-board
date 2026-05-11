@@ -1,0 +1,35 @@
+{
+  "name": "inventory-webapp-01-static-prototypes-1",
+  "version": "1.0.0",
+  "description": "Welcome to my basic web-app building tutorial series. Together, we will build a simple \"inventory\" web application. The running example will be a homework tracker; in each tutorial, you will be given the next steps.",
+  "homepage": "https://github.com/bryres/inventory-webapp-01-static-prototypes#readme",
+  "bugs": {
+    "url": "https://github.com/bryres/inventory-webapp-01-static-prototypes/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryres/inventory-webapp-01-static-prototypes.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "devstart": "nodemon -e js,ejs,sql,env app.js",
+    "dbcreate": "node db/db_create.js",
+    "dbsample": "node db/db_insert_sample_data.js",
+    "dbprint": "node db/db_print.js",
+    "devstart-fresh": "npm-run-all dbcreate dbsample dbprint devstart"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.1",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "morgan": "^1.10.1",
+    "mysql2": "^3.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
