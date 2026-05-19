@@ -1,0 +1,79 @@
+<%- include('header', { title: 'Search Events' }) %>
+
+<h1 class="mb-4">Find Volunteer Events</h1>
+
+<!-- Search Form -->
+<form action="/search" method="GET" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="Search events..."
+               value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+    </div>
+    <div class="col-md-3">
+        <select name="date_filter" class="form-select">
+            <option value="">All Dates</option>
+            <option value="upcoming" <%= dateFilter === 'upcoming' ? 'selected' : '' %>>Upcoming</option>
+            <option value="past" <%= dateFilter === 'past' ? 'selected' : '' %>>Past</option>
+            <option value="this_week" <%= dateFilter === 'this_week' ? 'selected' : '' %>>This Week</option>
+            <option value="this_month" <%= dateFilter === 'this_month' ? 'selected' : '' %>>This Month</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="organizer" class="form-select">
+            <option value="">All Organizers</option>
+            <% organizers.forEach(function(org) { %>
+                <option value="<%= org.user_id %>" <%= organizerFilter == org.user_id ? 'selected' : '' %>>
+                    <%= org.username %>
+                </option>
+            <% }); %>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+</form>
+
+<!-- Results -->
+<% if (events && events.length > 0) { %>
+    <div class="row">
+        <% events.forEach(function(event) { %>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= event.title %></h5>
+                        <p class="card-text text-muted small">
+                            Organized by: <strong><%= event.organizer_name || 'Unknown' %></strong>
+                        </p>
+                        <p class="card-text">
+                            <%= event.description.substring(0, 120) %><%= event.description.length > 120 ? '...' : '' %>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                📅 <%= new Date(event.date).toLocaleDateString('en-US', {
+                                    weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+                                }) %>
+                                at <%= new Date(event.date).toLocaleTimeString('en-US', {
+                                    hour: '2-digit', minute: '2-digit'
+                                }) %>
+                            </small>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                👥 <%= event.volunteer_count %> volunteer(s)
+                            </small>
+                        </p>
+                        <a href="/events/<%= event.event_id %>" class="btn btn-outline-success btn-sm">View Details</a>
+                    </div>
+                    <div class="card-footer text-muted small">
+                        Posted: <%= new Date(event.post_date).toLocaleDateString() %>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+<% } else { %>
+    <div class="alert alert-info">
+        No events found. Try adjusting your search filters.
+    </div>
+<% } %>
+
+<%- include('footer') %>

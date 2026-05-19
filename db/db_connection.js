@@ -5,7 +5,7 @@ const dbConfig = {
     port: 3306,
     user: 'jerche28',
     password: 'NTCNepwgbveL',
-    database: 'webapps_hw_track_2526_t3_jerche28',
+    database: 'webdev_proj_2526_t3_jerche28',
     connectTimeout: 10000
 }
 
