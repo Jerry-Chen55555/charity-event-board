@@ -1,11 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Event Board</title>
-</head>
-<body>
-    
-</body>
-</html>
+<%- include('header', { title: 'HORIZON - Home' }) %>
+
+<div class="row mb-5">
+    <div class="col-lg-8">
+        <h1>Welcome to <span class="text-orange">HORIZON</span></h1>
+        <p class="lead">
+            Connecting passionate volunteers with causes that matter. Discover local events,
+            donate your time, and make a difference in your community — all in one place.
+        </p>
+        <p>
+            <strong>HORIZON</strong> is designed for anyone looking to support a cause,
+            gain volunteer hours, or simply give back. It also helps organizers reach
+            more people and grow local support. No more endless research — find the
+            perfect event right here.
+        </p>
+        <a href="/search" class="btn btn-primary btn-lg mt-3">
+            Explore Events
+        </a>
+    </div>
+    <div class="col-lg-4 d-flex align-items-center justify-content-center">
+        <div class="text-center">
+            <div style="font-size: 6rem;">☀️</div>
+            <p class="text-muted">Your volunteering journey starts now.</p>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<!-- ABOUT ME Section -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card p-4">
+            <h2 class="card-title mb-3">About Me</h2>
+            <div class="card-body">
+                <!-- Edit everything below this line with your own information -->
+                <p>
+                    I'm Jerry Chen.
+                </p>
+                <p>
+                    I have 1 billion hours of community service. 
+                </p>
+                <!-- You can add links, images, etc. -->
+                <div class="mt-3">
+                    <a href="#" class="btn btn-outline-primary btn-sm me-2">GitHub</a>
+                    <a href="#" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

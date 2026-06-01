@@ -1,9 +1,32 @@
 const express = require('express');
+require('dotenv').config();
 const path = require('path');
 const db = require('./db/db_connection');
+const { auth, requiresAuth } = require('express-openid-connect');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Auth0 configuration - pick values from environment variables
+const authConfig = {
+    authRequired: false, // change to true if you want all routes protected by default
+    auth0Logout: true,
+    secret: process.env.AUTH0_SECRET || 'change_this_secret',
+    baseURL: process.env.AUTH0_BASE_URL || `http://localhost:3000`,
+    clientID: process.env.AUTH0_CLIENT_ID,
+    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+
+};
+
+// Mount the auth router which adds /login, /logout, /callback
+app.use(auth(authConfig));
+
+// expose authentication status and user to all views
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.oidc && req.oidc.isAuthenticated && req.oidc.isAuthenticated();
+    res.locals.user = req.oidc && req.oidc.user ? req.oidc.user : null;
+    next();
+});
 
 // EJS setup
 app.set('view engine', 'ejs');
@@ -13,9 +36,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// Redirect root to search
-app.get('/', (req, res) => {
-    res.redirect('/search');
+// Home page
+app.get('/', requiresAuth(), (req, res) => {
+    res.render('index');
 });
 
 // Search page – shows all events with optional filters
@@ -145,9 +168,17 @@ app.get('/events/:id', (req, res) => {
 
         db.execute(volunteerQuery, [eventId], (err2, volunteers) => {
             if (err2) volunteers = [];
-            res.render('event-detail', { event, volunteers });
+            res.render('event', { event, volunteers });   // <-- change this line
         });
     });
+});
+
+// return JSON about the logged-in user
+app.get('/me', requiresAuth(), (req, res) => {
+    console.log("email: " + req.oidc.user.email);
+
+    // express-openid-connect provides the user on req.oidc.user
+    res.json({ user: req.oidc && req.oidc.user ? req.oidc.user : null });
 });
 
 app.listen(PORT, () => {

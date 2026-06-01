@@ -61,7 +61,7 @@
                                 👥 <%= event.volunteer_count %> volunteer(s)
                             </small>
                         </p>
-                        <a href="/events/<%= event.event_id %>" class="btn btn-outline-success btn-sm">View Details</a>
+                        <a href="/events/<%= event.event_id %>" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success btn-sm">View Details</a>
                     </div>
                     <div class="card-footer text-muted small">
                         Posted: <%= new Date(event.post_date).toLocaleDateString() %>

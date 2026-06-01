@@ -2,7 +2,7 @@
    Global & Typography
 ------------------------------ */
 body {
-    background-color: #f7f9fc;
+    background-color: #fff9f2;  /* soft warm background */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -10,14 +10,20 @@ body {
    Navbar Customization
 ------------------------------ */
 .navbar {
-    background: linear-gradient(135deg, #2e7d32, #1b5e20) !important;
+    background: linear-gradient(135deg, #f57c00, #e65100) !important;
     box-shadow: 0 2px 10px rgba(0,0,0,0.15);
 }
 
 .navbar-brand {
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     letter-spacing: 0.5px;
+}
+
+.brand-icon {
+    font-size: 1.4rem;
+    margin-right: 0.3rem;
+    vertical-align: middle;
 }
 
 .navbar .nav-link {
@@ -25,10 +31,12 @@ body {
     padding: 0.5rem 1rem;
     border-radius: 6px;
     transition: background-color 0.2s;
+    color: rgba(255,255,255,0.9);
 }
 
-.navbar .nav-link:hover {
-    background-color: rgba(255,255,255,0.15);
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    background-color: rgba(255,255,255,0.2);
 }
 
 /* ------------------------------
@@ -36,7 +44,7 @@ body {
 ------------------------------ */
 h1 {
     font-weight: 700;
-    color: #1e3c26;
+    color: #e65100;
     margin-bottom: 1.5rem;
 }
 
@@ -54,12 +62,12 @@ form .form-select {
 
 form .form-control:focus,
 form .form-select:focus {
-    border-color: #2e7d32;
-    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.15);
+    border-color: #f57c00;
+    box-shadow: 0 0 0 0.2rem rgba(245, 124, 0, 0.15);
 }
 
 form .btn-primary {
-    background-color: #2e7d32;
+    background-color: #f57c00;
     border: none;
     border-radius: 10px;
     padding: 0.6rem;
@@ -68,7 +76,7 @@ form .btn-primary {
 }
 
 form .btn-primary:hover {
-    background-color: #1b5e20;
+    background-color: #e65100;
     transform: translateY(-1px);
 }
 
@@ -104,17 +112,18 @@ form .btn-primary:hover {
 }
 
 .btn-outline-success {
-    border: 2px solid #2e7d32;
-    color: #2e7d32;
+    /* We'll repurpose as orange outline */
+    border: 2px solid #f57c00;
+    color: #f57c00;
     border-radius: 8px;
     font-weight: 600;
     transition: all 0.2s;
 }
 
 .btn-outline-success:hover {
-    background-color: #2e7d32;
+    background-color: #f57c00;
     color: white;
-    border-color: #2e7d32;
+    border-color: #f57c00;
 }
 
 .card-footer {
@@ -128,19 +137,41 @@ form .btn-primary:hover {
    Alerts
 ------------------------------ */
 .alert-info {
-    background-color: #e8f5e9;
+    background-color: #fff3e0;
     border: none;
-    color: #256029;
+    color: #e65100;
     border-radius: 10px;
     padding: 1.2rem;
 }
 
 /* ------------------------------
-   Volunteer badge / icon tweaks
+   General button overrides for orange theme
 ------------------------------ */
-.card .text-muted i,
-.card .text-muted em {
-    font-style: normal;
+.btn-primary {
+    background-color: #f57c00;
+    border-color: #f57c00;
+}
+.btn-primary:hover {
+    background-color: #e65100;
+    border-color: #e65100;
 }
 
-/* Emoji replacements for older browsers, but we'll keep the actual emoji */
+/* Home page specific */
+.text-orange {
+    color: #f57c00;
+}
+
+.card .btn-outline-primary {
+    border-color: #f57c00;
+    color: #f57c00;
+}
+
+.card .btn-outline-primary:hover {
+    background-color: #f57c00;
+    color: white;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

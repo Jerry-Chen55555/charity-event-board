@@ -26,6 +26,7 @@
     "dotenv": "^17.4.1",
     "ejs": "^5.0.2",
     "express": "^5.2.1",
+    "express-openid-connect": "^3.0.0",
     "morgan": "^1.10.1",
     "mysql2": "^3.20.0"
   },
