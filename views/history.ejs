@@ -1,0 +1,106 @@
+<%- include('header', { title: 'My History' }) %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">My History</h1>
+        <p class="text-muted mb-0">Track the events you joined and the events you created.</p>
+    </div>
+    <a href="/search" class="btn btn-outline-primary">Find More Events</a>
+</div>
+
+<% if (message) { %>
+    <div class="alert alert-<%= message.type %>"><%= message.text %></div>
+<% } %>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Events I Joined</h2>
+
+                <% if (volunteeringEvents.length > 0) { %>
+                    <div class="list-group list-group-flush">
+                        <% volunteeringEvents.forEach(function(event) { %>
+                            <% const isPast = new Date(event.date) < new Date(); %>
+                            <a href="/events/<%= event.event_id %>" class="list-group-item list-group-item-action px-0">
+                                <div class="d-flex w-100 align-items-start justify-content-between gap-3">
+                                    <div>
+                                        <h3 class="h6 mb-1"><%= event.title %></h3>
+                                        <p class="mb-1 text-muted small">
+                                            Organized by
+                                            <strong>
+                                                <%= [event.organizer_first, event.organizer_last].filter(Boolean).join(' ') || event.organizer_name || 'Unknown' %>
+                                            </strong>
+                                        </p>
+                                    </div>
+                                    <span class="badge <%= isPast ? 'text-bg-secondary' : 'text-bg-success' %>">
+                                        <%= isPast ? 'Past' : 'Upcoming' %>
+                                    </span>
+                                </div>
+                                <small class="text-muted">
+                                    <%= new Date(event.date).toLocaleString('en-US', {
+                                        weekday: 'short',
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit'
+                                    }) %>
+                                </small>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-info mb-0">
+                        You have not signed up for any events yet.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Events I Organized</h2>
+
+                <% if (createdEvents.length > 0) { %>
+                    <div class="list-group list-group-flush">
+                        <% createdEvents.forEach(function(event) { %>
+                            <% const isPast = new Date(event.date) < new Date(); %>
+                            <a href="/events/<%= event.event_id %>" class="list-group-item list-group-item-action px-0">
+                                <div class="d-flex w-100 align-items-start justify-content-between gap-3">
+                                    <div>
+                                        <h3 class="h6 mb-1"><%= event.title %></h3>
+                                        <p class="mb-1 text-muted small">
+                                            <%= event.volunteer_count %> volunteer(s)
+                                        </p>
+                                    </div>
+                                    <span class="badge <%= isPast ? 'text-bg-secondary' : 'text-bg-success' %>">
+                                        <%= isPast ? 'Past' : 'Upcoming' %>
+                                    </span>
+                                </div>
+                                <small class="text-muted">
+                                    <%= new Date(event.date).toLocaleString('en-US', {
+                                        weekday: 'short',
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit'
+                                    }) %>
+                                </small>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-info mb-0">
+                        You have not organized any events yet.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

@@ -1,0 +1,58 @@
+<%- include('header', { title: 'Create Event', leaflet: true }) %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Create Event</h1>
+        <p class="text-muted mb-0">Post a volunteer opportunity for the community.</p>
+    </div>
+    <a href="/user" class="btn btn-outline-primary">Back to Profile</a>
+</div>
+
+<% if (message) { %>
+    <div class="alert alert-<%= message.type %>"><%= message.text %></div>
+<% } %>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form action="/events" method="POST" class="event-form">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label for="title" class="form-label">Event Title</label>
+                    <input id="title" name="title" class="form-control" maxlength="100" required value="<%= formData.title || '' %>">
+                </div>
+                <div class="col-md-4">
+                    <label for="event_date" class="form-label">Date and Time</label>
+                    <input id="event_date" name="event_date" type="datetime-local" class="form-control" required value="<%= formData.event_date || '' %>">
+                </div>
+                <div class="col-12">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="5" maxlength="2000" required><%= formData.description || '' %></textarea>
+                </div>
+                <div class="col-12">
+                    <label for="schedule" class="form-label">Schedule</label>
+                    <textarea id="schedule" name="schedule" class="form-control" rows="4" maxlength="2000"><%= formData.schedule || '' %></textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Pick event location</label>
+                    <div id="event-map" class="mb-2" style="height: 360px; background: #e9ecef;"></div>
+                    <p id="event-map-help" class="form-text">Click on the map to choose a location...</p>
+                </div>
+                <div class="col-md-6">
+                    <label for="latitude" class="form-label">Latitude</label>
+                    <input id="latitude" name="latitude" type="number" step="any" class="form-control" value="<%= formData.latitude || '' %>">
+                </div>
+                <div class="col-md-6">
+                    <label for="longitude" class="form-label">Longitude</label>
+                    <input id="longitude" name="longitude" type="number" step="any" class="form-control" value="<%= formData.longitude || '' %>">
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">Create Event</button>
+                <a href="/search" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('footer') %>

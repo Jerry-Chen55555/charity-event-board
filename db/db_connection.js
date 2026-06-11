@@ -6,9 +6,13 @@ const dbConfig = {
     user: 'jerche28',
     password: 'NTCNepwgbveL',
     database: 'webdev_proj_2526_t3_jerche28',
-    connectTimeout: 10000
+    connectTimeout: 20000,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true
 }
 
-const connection = mysql.createConnection(dbConfig);
+const connection = mysql.createPool(dbConfig);
 
 module.exports = connection;

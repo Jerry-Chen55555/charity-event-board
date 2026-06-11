@@ -1,12 +1,18 @@
-<%- include('header', { title: event.title }) %>
+<%- include('header', { title: event.title, leaflet: true }) %>
 
 <div class="card shadow-sm">
     <div class="card-body">
         <h1 class="card-title"><%= event.title %></h1>
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="alert alert-<%= message.type %>"><%= message.text %></div>
+        <% } %>
         
         <!-- Organizer Info -->
         <p class="text-muted mb-4">
-            Organized by <strong><%= event.organizer_name || 'Unknown' %></strong>
+            Organized by
+            <strong>
+                <%= [event.organizer_first, event.organizer_last].filter(Boolean).join(' ') || event.organizer_name || 'Unknown' %>
+            </strong>
             <% if (event.organizer_bio) { %>
                 <br><small><%= event.organizer_bio %></small>
             <% } %>
@@ -26,18 +32,17 @@
                 </p>
             </div>
             <div class="col-md-6">
-                <h5><strong>Location</strong></h5>
-                <% if (event.location_text) { %>
-                    <p>
-                        <%= event.location_text %><br>
-                        <a href="https://www.google.com/maps?q=<%= event.location_text.replace('POINT(', '').replace(')', '').split(' ').reverse().join(',') %>" 
-                           target="_blank" class="btn btn-outline-primary btn-sm mt-1">
-                            View on Map
-                        </a>
-                    </p>
-                <% } else { %>
-                    <p>Location not specified</p>
-                <% } %>
+                <div class="col-md-6">
+                    <h5><strong>Location</strong></h5>
+                    <% if (event.latitude && event.longitude) { %>
+                        <div id="event-location-map" 
+                            data-lat="<%= event.latitude %>" 
+                            data-lng="<%= event.longitude %>"
+                            style="height: 360px; background: #e9ecef;"></div>
+                    <% } else { %>
+                        <p>Location not specified</p>
+                    <% } %>
+                </div>
             </div>
         </div>
         
@@ -57,7 +62,7 @@
             <ul class="list-group list-group-flush">
                 <% volunteers.forEach(function(vol) { %>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <%= vol.first_name %> <%= vol.last_name %>
+                        <%= [vol.first_name, vol.last_name].filter(Boolean).join(' ') || vol.username %>
                         <span class="text-muted">@<%= vol.username %></span>
                     </li>
                 <% }); %>
@@ -66,9 +71,20 @@
             <p class="text-muted">No volunteers signed up yet. Be the first!</p>
         <% } %>
         
+        <% /* Location map already shown in the location column above */ %>
         <!-- Sign Up Button -->
         <div class="mt-4">
-            <button class="btn btn-primary btn-lg">Sign Up to Volunteer</button>
+            <% if (typeof isAuthenticated !== 'undefined' && !isAuthenticated) { %>
+                <a href="/login?returnTo=/events/<%= event.event_id %>" class="btn btn-primary btn-lg">Log In to Volunteer</a>
+            <% } else if (typeof isOrganizer !== 'undefined' && isOrganizer) { %>
+                <a href="/history" class="btn btn-outline-primary btn-lg">View Organizer History</a>
+            <% } else if (typeof isSignedUp !== 'undefined' && isSignedUp) { %>
+                <a href="/history" class="btn btn-outline-primary btn-lg">View My History</a>
+            <% } else { %>
+                <form action="/events/<%= event.event_id %>/signup" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-primary btn-lg">Sign Up to Volunteer</button>
+                </form>
+            <% } %>
         </div>
     </div>
     <div class="card-footer text-muted">

@@ -1,0 +1,99 @@
+<%- include('header', { title: 'My Profile' }) %>
+
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">My Profile</h1>
+        <p class="text-muted mb-0">Manage your volunteer profile and the events you organize.</p>
+    </div>
+    <a href="/events/new" class="btn btn-primary">Create Event</a>
+</div>
+
+<% if (message) { %>
+    <div class="alert alert-<%= message.type %>"><%= message.text %></div>
+<% } %>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Profile Details</h2>
+                <form action="/user" method="POST" class="profile-form">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input id="first_name" name="first_name" class="form-control" value="<%= localUser.first_name || '' %>">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input id="last_name" name="last_name" class="form-control" value="<%= localUser.last_name || '' %>">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="username" class="form-label">Username</label>
+                            <input id="username" name="username" class="form-control" required value="<%= localUser.username || '' %>">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone_nbr" class="form-label">Phone</label>
+                            <input id="phone_nbr" name="phone_nbr" class="form-control" value="<%= localUser.phone_nbr || '' %>">
+                        </div>
+                        <div class="col-12">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea id="bio" name="bio" class="form-control" rows="4"><%= localUser.bio || '' %></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Save Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+                <div class="stat-panel">
+                    <span class="stat-number"><%= createdEvents.length %></span>
+                    <span class="stat-label">event(s) organized</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="stat-panel">
+                    <span class="stat-number"><%= volunteeringEvents.length %></span>
+                    <span class="stat-label">event(s) joined</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                    <h2 class="h4 mb-0">My Created Events</h2>
+                    <a href="/history" class="btn btn-outline-primary btn-sm">View History</a>
+                </div>
+
+                <% if (createdEvents.length > 0) { %>
+                    <div class="list-group list-group-flush">
+                        <% createdEvents.slice(0, 5).forEach(function(event) { %>
+                            <a href="/events/<%= event.event_id %>" class="list-group-item list-group-item-action px-0">
+                                <div class="d-flex w-100 justify-content-between gap-3">
+                                    <h3 class="h6 mb-1"><%= event.title %></h3>
+                                    <small class="text-muted text-nowrap">
+                                        <%= new Date(event.date).toLocaleDateString() %>
+                                    </small>
+                                </div>
+                                <p class="mb-1 text-muted small">
+                                    <%= event.description ? event.description.substring(0, 120) : '' %><%= event.description && event.description.length > 120 ? '...' : '' %>
+                                </p>
+                                <small class="text-muted"><%= event.volunteer_count %> volunteer(s)</small>
+                            </a>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="alert alert-info mb-0">
+                        You have not created an event yet.
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer') %>

@@ -1,6 +1,9 @@
-<%- include('header', { title: 'Search Events' }) %>
+<%- include('header', { title: 'Search Events', leaflet: true }) %>
 
-<h1 class="mb-4">Find Volunteer Events</h1>
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <h1 class="mb-0">Find Volunteer Events</h1>
+    <a href="/events/new" class="btn btn-primary">Create Event</a>
+</div>
 
 <!-- Search Form -->
 <form action="/search" method="GET" class="row g-3 mb-4">
@@ -18,17 +21,26 @@
         </select>
     </div>
     <div class="col-md-3">
-        <select name="organizer" class="form-select">
-            <option value="">All Organizers</option>
-            <% organizers.forEach(function(org) { %>
-                <option value="<%= org.user_id %>" <%= organizerFilter == org.user_id ? 'selected' : '' %>>
-                    <%= org.username %>
-                </option>
-            <% }); %>
-        </select>
+        <input type="number" name="max_distance" class="form-control" step="1" min="1" placeholder="Max distance (miles)"
+               value="<%= typeof maxDistance !== 'undefined' ? maxDistance : '' %>">
     </div>
     <div class="col-md-2">
         <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+    <div class="col-12">
+        <label class="form-label">Search from a location</label>
+        <div id="search-map" class="mb-2"></div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <input type="text" id="location_lat" name="location_lat" class="form-control" placeholder="Latitude"
+                       value="<%= typeof locationLat !== 'undefined' ? locationLat : '' %>">
+            </div>
+            <div class="col-md-6">
+                <input type="text" id="location_lng" name="location_lng" class="form-control" placeholder="Longitude"
+                       value="<%= typeof locationLng !== 'undefined' ? locationLng : '' %>">
+            </div>
+        </div>
+        <div class="form-text">Click the map to set search location; the page will use those coordinates to filter nearby events.</div>
     </div>
 </form>
 
@@ -43,6 +55,11 @@
                         <p class="card-text text-muted small">
                             Organized by: <strong><%= event.organizer_name || 'Unknown' %></strong>
                         </p>
+                        <% if (typeof event.distance_miles !== 'undefined' && event.distance_miles !== null) { %>
+                            <p class="card-text text-muted small">
+                                📍 <%= event.distance_miles.toFixed(1) %> miles away
+                            </p>
+                        <% } %>
                         <p class="card-text">
                             <%= event.description.substring(0, 120) %><%= event.description.length > 120 ? '...' : '' %>
                         </p>
@@ -61,7 +78,7 @@
                                 👥 <%= event.volunteer_count %> volunteer(s)
                             </small>
                         </p>
-                        <a href="/events/<%= event.event_id %>" target="_blank" rel="noopener noreferrer" class="btn btn-outline-success btn-sm">View Details</a>
+                        <a href="/events/<%= event.event_id %>" class="btn btn-outline-success btn-sm">View Details</a>
                     </div>
                     <div class="card-footer text-muted small">
                         Posted: <%= new Date(event.post_date).toLocaleDateString() %>
